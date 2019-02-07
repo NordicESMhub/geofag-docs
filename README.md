@@ -1,5 +1,6 @@
 # Geosciences Modeling Documentation
 
+[![Documentation Status](https://readthedocs.org/projects/uio-geofag-docs/badge/?version=latest)](https://uio-geofag-docs.readthedocs.io/en/latest/?badge=latest)
 [![License: CC BY 4.0](https://img.shields.io/badge/License-CC%20BY%204.0-lightgrey.svg)](https://creativecommons.org/licenses/by/4.0/)
 
 
