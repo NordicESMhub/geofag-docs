@@ -13,6 +13,7 @@ Welcome to Geosciences Modelling's documentation!
    computing_facilities
    storage
    models
+   data
 
 Indices and tables
 ==================
