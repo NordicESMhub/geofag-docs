@@ -481,7 +481,220 @@ invoke this command, you must set your SSH-keys:
 
 Step 2:
 Then, paste content of the local ~/.ssh/id_rsa.pub file into the file
+~/.ssh/authorized_keys on the remote host. 
+
+Step 2:
+Then, paste content of the local ~/.ssh/id_rsa.pub file into the file
 ~/.ssh/authorized_keys on the remote host. Please make sure the file
+~/.ssh/authorized_keys is readbale by you only:
+
+::
+
+   chmod og-rwx ~/.ssh/authorized_keys
+
+.. container::
+
+You can do Step 1 on your local machine and Step 2 on abel and then Step
+1 on abel and Step 2 on your local machine to have access from and to
+abel.
+
+| 
+
+Once this is done, you can use rsync command or scp to copy your data
+back to your local directory. An example in given in the complete batch
+script given below.
+
+| 
+
+Example of a complete batch script for running wrf on abel
+~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+
+Here we run wrf.exe for the January200Case (see WRF examples). We assume
+that all the previous steps have been run and run wrf.exe in batch mode.
+
+::
+
+   #!/bin/bash
+   # Job name:
+   #SBATCH --job-name=wrf
+   #
+   # Project:
+   #SBATCH --account=geofag
+   #
+   # Wall clock limit:
+   #SBATCH --time=100:0:0
+   #
+   # Max memory usage per task:
+   #SBATCH --mem-per-cpu=4000M
+   #
+   # Number of tasks (cores):
+   #SBATCH --ntasks=8
+   #
+
+
+   # Set up job environment (do not remove this line...)
+   source /cluster/bin/jobsetup
+   ulimit -s unlimited
+
+
+   module load wrf
+
+
+   # Run the model (wrf.exe)
+   run_wrf.py --expid January2000Case --npes 8 \
+              --namelist /cluster/software/VERSIONS/wrf/examples/January2000Case/namelist.input
+
+   # Copy your data on your local machine
+   rsync -avz $WORKDIR/January2000Case/wrfout* $USER@sverdrup.uio.no:January2000Case/.
+   rsync -avz $WORKDIR/January2000Case/wrfrst* $USER@sverdrup.uio.no:January2000Case/.
+
+   #
+   # End of jobscript
+   #
+
+| 
+|  
+
+To submit your job script:
+
+::
+
+   sbatch job_wrf.sh
+
+ 
+
+For more information on Abel see `The Abel compute Cluster`_.
+
+| 
+
+How to change or add new code?
+------------------------------
+
+ The easiest for changing WRF code is to copy the pre-installed version,
+make your changes and then recompile WRF. Here is an example:
+
+::
+
+   module load wrf
+
+   mkdir $HOME/WORK
+
+   cd $HOME/WORK
+
+   cp -R $WRF_HOME .
+
+   module purge
+
+   export WRF_HOME=$HOME/WORK/WRFV3
+
+   module load wrf
+
+| 
+| Then you can edit any files and recompile WRF:
+
+./clean -a
+
+./configure
+
+(make sure you choose 15 i.e. dmpar)
+
+::
+
+   ./compile em_real >& compile.log
+
+| 
+| It is unlikely you have to change WPS but if you need to, you should
+  do the same (define WPS_HOME, etc.).
+
+| 
+
+ 
+
+TIPS and known problems
+-----------------------
+
+Often-seen runtime problems
+~~~~~~~~~~~~~~~~~~~~~~~~~~~
+
+-  Segmentation fault (core dumped): if it appears immediately after
+   starting wrf.exe, it may be due to insufficient stack memory. Try:
+
+::
+
+    ulimit -s unlimited
+
+ 
+
+and rerun wrf.exe
+
+| 
+
+Problems for creating all the WRF inputs when having more than one domain (and get wrfinput_d01 and wrfbdy_d01 only)
+~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+
+-  if your namelist.wps has the correct list of dates for each domain,
+   make sure you do not use start_date and end_date option when running
+   run_ungrib.py
+
+For instance:
+
+::
+
+                run_ungrib.py --expid  NestedModelRunsB           \
+                              --vtable  /cluster/software/VERSIONS/wrf/examples/HurricaneKatrina/Vtable.GFS \
+                              --datadir /cluster/software/VERSIONS/wrf/examples/HurricaneKatrina/DATA/Katrina
+
+-  If you wish to pass the list of dates, make sure you give the dates
+   for each domain:
+
+| 
+
+::
+
+                run_ungrib.py --expid  NestedModelRunsB           \
+                              --start_date "2005-08-28_00:00:00, 2005-08-28_00:00:00"    \
+                              --end_date "2005-08-29_00:00:00, 2005-08-28_00:00:00"     \
+                              --interval_seconds 21600            \
+                              --prefix FILE                       \
+                              --vtable  /cluster/software/VERSIONS/wrf/examples/HurricaneKatrina/Vtable.GFS \
+                              --datadir /cluster/software/VERSIONS/wrf/examples/HurricaneKatrina/DATA/Katrina
+
+::
+
+::
+
+| 
+
+Possible error messages if the data download is incorrect
+~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+
+Landsea mask
+^^^^^^^^^^^^
+
+When running metgrid, the following error may result if you download
+constant fields for the surface:
+
+::
+
+   /usit/abel/u1/irenebn/Scandinavia/April2005Case/METGRID.TBL
+   Processing domain 1 of 1
+      LSM:2014-04-15_12
+      Z:2014-04-15_12
+   Processing 2014-04-15_00
+      FILE
+   ERROR: Cannot combine time-independent data with time-dependent data for field LANDSEA.mask
+   --------------------------------------------------------------------------
+   MPI_ABORT was invoked on rank 0 in communicator MPI_COMM_WORLD 
+   with errorcode 0.
+   NOTE: invoking MPI_ABORT causes Open MPI to kill all MPI processes.
+   You may or may not see output from other processes, depending on
+   exactly when Open MPI kills them.
+   --------------------------------------------------------------------------
+
+| This error resulted from having downloaded lsm (variable 129.128), and
+  is solved by avoid downloading constant fields.
+  
+.. _The Abel compute Cluster: http://www.uio.no/english/services/it/research/hpc/abel/
 
 .. _here: http://www.uio.no/english/services/it/research/hpc/abel/help/user-guide/queue-system.html
   
