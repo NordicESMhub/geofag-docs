@@ -4,7 +4,6 @@ WRF model
 WRF and WRF-CHEM have been installed on Abel. To check which version is
 available:
 
-| 
 
 ::
 
@@ -16,9 +15,9 @@ available:
 | 
 | To set-up your environment for WRF (no chemistry):
 
-| 
 
 ::
+
    export WRF_CHEM=0
    module load wrf/3.9.1.1
 
@@ -26,9 +25,9 @@ available:
 | 
 | To set-up your environment for WRF-CHEM (with chemistry):
 
-| 
 
 ::
+
    module load wrf/3.9.1.1
      
 
@@ -59,8 +58,9 @@ WRF has been compiled with intel compilers and MPI:
    module list 
 
    Currently Loaded Modulefiles:
-     1) use.own                 3) openmpi.intel/1.6.1     5) netcdf.intel/4.2.1.1    7) jasper/1.900.1          9) openmpi.intel/1.8      11) wrf/3.6.1
-     2) intel/2011.10           4) hdf5/1.8.9_intel        6) intel-libs/2013.sp1.3   8) intel/2013.sp1.3       10) ncl/6.2.0
+  1) use.own                 4) hdf5/1.8.14_intel       7) jasper/1.900.1         10) wrf/3.9.1.1
+  2) intel/2015.0            5) netcdf.intel/4.3.3.1    8) ncl/6.2.0
+  3) openmpi.intel/1.8.3     6) intel-libs/2013.sp1.3   9) Anaconda3/5.1.0
 
 | 
 | We suggest you specify the version you wish to use to avoid any
