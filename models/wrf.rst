@@ -10,17 +10,27 @@ available:
 
    module avail wrf
 
-   -------------------------------------------------------------------------------------- /cluster/etc/modulefiles ---------------------------------------------------------------------------------------
-   wrf/3.6.1
+   ------------------------ /cluster/etc/modulefiles --------------------------
+   wrf/3.9.1.1
 
 | 
-| To set-up your environment:
+| To set-up your environment for WRF (no chemistry):
 
 | 
 
 ::
+   export WRF_CHEM=0
+   module load wrf/3.9.1.1
 
-   module load wrf/3.6.1
+   
+| 
+| To set-up your environment for WRF-CHEM (with chemistry):
+
+| 
+
+::
+   module load wrf/3.9.1.1
+     
 
 | 
 | When loading wrf, the following environment variables are defined:
