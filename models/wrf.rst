@@ -295,10 +295,9 @@ http://www2.mmm.ucar.edu/wrf/OnLineTutorial/CASES/NestRuns/index.html).
 .. _HurricaneKatrinaSST: http://www2.mmm.ucar.edu/wrf/OnLineTutorial/CASES/SST/index.html
 .. _NestedModelRuns: http://www2.mmm.ucar.edu/wrf/OnLineTutorial/CASES/NestRuns/index.html
 
-.. |Katrina-08-28-2005 small.jpg| image:: ./WRFand%20WRF-CHEM%20-%20mn_geo_geoit_files/Katrina-08-28-2005_small.jpg
+.. |Katrina-08-28-2005 small.jpg| image:: ../img/Katrina-08-28-2005_small.jpg
    :width: 360px
    :height: 225px
-   :target: https://wiki.uio.no/mn/geo/geoit/index.php/File:Katrina-08-28-2005_small.jpg
 .. |Domain-nested.png| image:: ../img/Domain-nested.png
    :width: 461px
    :height: 329px
