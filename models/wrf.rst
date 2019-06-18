@@ -246,14 +246,12 @@ scale, packing winds estimated at 175 mph.
 .. _ncview: http://meteora.ucsd.edu/~pierce/ncview_home_page.html
 .. _HurricaneKatrina: http://www2.mmm.ucar.edu/wrf/OnLineTutorial/CASES/SingleDomain/
 
-.. |Ncview-p1.png| image:: ./WRFand%20WRF-CHEM%20-%20mn_geo_geoit_files/Ncview-p1.png
+.. |Ncview-p1.png| image:: ../img/Ncview-p1.png
    :width: 570px
    :height: 529px
-   :target: https://wiki.uio.no/mn/geo/geoit/index.php/File:Ncview-p1.png
-.. |Ncview-p2.png| image:: ./WRFand%20WRF-CHEM%20-%20mn_geo_geoit_files/Ncview-p2.png
+.. |Ncview-p2.png| image:: ../img/Ncview-p2.png
    :width: 363px
    :height: 327px
-   :target: https://wiki.uio.no/mn/geo/geoit/index.php/File:Ncview-p2.png
    
 +-----------------------------------------------------------------------+
 | .. container:: floatnone                                              |
@@ -301,10 +299,9 @@ http://www2.mmm.ucar.edu/wrf/OnLineTutorial/CASES/NestRuns/index.html).
    :width: 360px
    :height: 225px
    :target: https://wiki.uio.no/mn/geo/geoit/index.php/File:Katrina-08-28-2005_small.jpg
-.. |Domain-nested.png| image:: ./WRFand%20WRF-CHEM%20-%20mn_geo_geoit_files/Domain-nested.png
+.. |Domain-nested.png| image:: ../img/Domain-nested.png
    :width: 461px
    :height: 329px
-   :target: https://wiki.uio.no/mn/geo/geoit/index.php/File:Domain-nested.png
 
 There are a number of different ways to set up nested model runs (*in
 this tutorial we are only going to set-up 2-way interactive nested
