@@ -255,7 +255,241 @@ scale, packing winds estimated at 175 mph.
    :height: 327px
    :target: https://wiki.uio.no/mn/geo/geoit/index.php/File:Ncview-p2.png
    
++-----------------------------------------------------------------------+
+| .. container:: floatnone                                              |
+|                                                                       |
+|    |Katrina-08-28-2005 small.jpg|                                     |
+|                                                                       |
+| Hurricane Katrina on August 28, 2005 (image taken                     |
+|                                                                       |
+| from http://www2.mmm.ucar.edu/wrf/OnLineTutorial/CASES/SingleDomain/) |
++-----------------------------------------------------------------------+
+
+`HurricaneKatrinaSST`_\  
+~~~~~~~~~~~~~~~~~~~~~~~~~
+
+The goal here is to input SST into WRF model. For these runs we will use
+the Hurricane Katrina case data (*2005-08-28_00 to 2005-08-29_00*).
+
+SST are typically added to the model:
+
+   a. Use the SST at the initial time as a constant field for all time
+   periods (*this is good for short runs, like real-time runs, where SST
+   is not updated during the WRF model run*)
+   b. As an extra input at each model input time (*this is good for long
+   -months- model runs*)
+
+`NestedModelRuns`_\  
+~~~~~~~~~~~~~~~~~~~~~
+
+For these runs we will use the Katrina Hurricane case data
+(*2005-08-28_00 to 2005-08-29_00*).
+
+The domain we are going to set up is show below (image taken from
+http://www2.mmm.ucar.edu/wrf/OnLineTutorial/CASES/NestRuns/index.html).
+
++-----------------------------------------------------------------------+
+| .. container:: floatnone                                              |
+|                                                                       |
+|    |Domain-nested.png|                                                |
++-----------------------------------------------------------------------+
+
+.. _HurricaneKatrinaSST: http://www2.mmm.ucar.edu/wrf/OnLineTutorial/CASES/SST/index.html
+.. _NestedModelRuns: http://www2.mmm.ucar.edu/wrf/OnLineTutorial/CASES/NestRuns/index.html
+
+.. |Katrina-08-28-2005 small.jpg| image:: ./WRFand%20WRF-CHEM%20-%20mn_geo_geoit_files/Katrina-08-28-2005_small.jpg
+   :width: 360px
+   :height: 225px
+   :target: https://wiki.uio.no/mn/geo/geoit/index.php/File:Katrina-08-28-2005_small.jpg
+.. |Domain-nested.png| image:: ./WRFand%20WRF-CHEM%20-%20mn_geo_geoit_files/Domain-nested.png
+   :width: 461px
+   :height: 329px
+   :target: https://wiki.uio.no/mn/geo/geoit/index.php/File:Domain-nested.png
+
+There are a number of different ways to set up nested model runs (*in
+this tutorial we are only going to set-up 2-way interactive nested
+runs*).
+
+   a. `Two-way nested run, with one input file`_
+   The preprocessing steps for this case will be similar to a single
+   domain setup. The only difference, is that during the wrf.exe
+   execution, a second (*or more*) nest(s) is initiated. The
+   corresponding workflow can be found in *workflow_a.bash*
+
+..
+
+   | b. `Two-way nested run, with two input files`_
+   | For this case the pre-processing programs need to be run to create
+     extra input data for the wrf model run. At the WRF model step, one
+     has the choice to:
+
+      i. Use all the meteorological and static data for nested domains
+      as input, (see workflow_b.bash) or
+      ii. Use only the static data for nested domains as input (see
+      workflow_bb.bash).
+
+   | c. `One-way nesting using ndown`_
+   | ndown is used to run one-way nested runs AFTER wrf has already been
+     run for the mother domain.
+   | One-way nesting can also be done similar to two-way nested runs
+     (*both a and b above*), by simply setting feedback in the WRF
+     namelist.input file equal to 0. The corresponding workflow can be
+     found in *workflow_c.bash*
+   |  
+
+`RestartRun`_
+~~~~~~~~~~~~~
+
+This case study we will use the same setup as for the Single Domain run,
+we will just restart it from the previous run. As for all other
+examples, run workflow.bash
+
+April2005Case 
+~~~~~~~~~~~~~~
+
+This example is showing how to run from ERA-Interim data instead of GFS
+data. As you can see in workflow.bash, another Vtable needs to be used
+(Vtable.EI).
+
+| 
+
+WRF has been compiled with WRF_CHEM=1 and  WRF_KPP=1 and is therefore
+suitable for WRF-CHEM simulations. The three next examples shows how to
+use WRF-CHEM at UIO.
+
+| 
+
+BiogenicEmissions 
+~~~~~~~~~~~~~~~~~~
+
+This example uses WRF-CHEMand its goal is to get familiar with the
+methodology by which the MEGAN biogenic emissions are introduced into
+the WRF-Chem simulation.
+
+This exercise is intended to be completed by students that have
+knowledge about setting-up and running the WRF numerical model.
+
+There are two workflows:
+
+-  option-1 (*workflow-opt1.bash*) uses GOCART-RACM_KPP aerosol option
+   (chem_opt=301), Geunther biogenic emissions (bio_emiss_opt=1). dust,
+   sea salt, DMS, and biomass burning will still be included so keep
+   those options turned on.
+-  option-2 (*workflow-opt2.bash*)
+
+DustErosion2010 
+~~~~~~~~~~~~~~~~
+
+This example uses WRF-CHEM. The purpose of this example is to get
+familiar with the methodology by which the dust erosion fields are
+introduced through the WRF Preprocessing System (WPS). The corresponding
+workflow is called\ *workflow.bash*
+
+GOCARTaerosols 
+~~~~~~~~~~~~~~~
+
+This example uses WRF-CHEM.  A global emissions  data set was prepared
+by a program called "prep_chem_sources" and with this program
+anthropogenic emissions, GOCART background fields and biomass burning
+(wild fire) emissions was previously mapped to the user domain. In this
+exercise you will use the emissions data and follow the methodology for
+making a WRF-Chem forecast shown here. The corresponding workflow is
+called *workflow.bash*
+
+Running "long" simulations on abel
+----------------------------------
+
+SLURM batch system
+~~~~~~~~~~~~~~~~~~
+
+For most of your WRF runs (wrf.exe), you will need to use SLURM batch
+system (you can not use more than 30mn CPU on the interactive node and
+cannot run WRF efficiently  in parallel). This requires to create what
+we call a batch job script: it's a script with additional SLURM
+directives. SLURM is the current batch system used on abel.
+
+The most important when running wrf is to:
+
+-  choose the number of tasks (#SBATCH --ntasks)
+-  set the amount of memory per task (#SBATCH --mem-per-cpu)
+-  set the wall clock time limit (#SBATCH --time)
+
+and add the following SLURM directives in your script:
+
+::
+
+   # Number of tasks (cores):
+   #SBATCH --ntasks=8
+
+it sets the number of tasks to 8 (i.e. WRF will be using 8 processors
+for running wrf.exe)
+
+| 
+
+::
+
+   # Max memory usage per task:
+   #SBATCH --mem-per-cpu=4000M
+   #
    
+ it sets the maximum amount of memory you will be using per tasks. In the
+above example, 4000 Mb per task may be used.
+
+| 
+
+::
+
+   # Wall clock limit:
+   #SBATCH --time=100:0:0
+
+it sets a limit of 100 hours for your run. It is advised to split long
+simulations in chunks and create restart files regularly instead of
+submitting a huge job.
+
+| 
+
+For more information on the queue system, look `here`_.
+
+Save your outputs on your local machine
+~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+
+When running WRF, your outputs will be stored in $WORKDIR and deleted
+after about 45 days. It is therefore important to save your outputs on
+your local machine. This is usually done with an  rsync command (see
+example below) and to avoid having to enter your password everytime you
+invoke this command, you must set your SSH-keys:
+
+.. container::
+
+    Step 1 on your local machine:
+   % cd ~/.ssh
+    % ssh-keygen -t rsa
+   Generating public/private rsa key pair.
+   Enter file in which to save the key (~/.ssh/id_rsa): (just type
+   return or something like ~/.ssh/id_rsa_name of my machine)
+   Enter passphrase (empty for no passphrase): (just type return)
+
+.. container::
+
+   Enter same passphrase again: (just type return)
+   Your identification has been saved in ~/.ssh/id_rsa
+   Your public key has been saved in ~/.ssh/id_rsa.pub
+   The key fingerprint is:
+   Some really long string
+
+.. container::
+
+Step 2:
+Then, paste content of the local ~/.ssh/id_rsa.pub file into the file
+~/.ssh/authorized_keys on the remote host. Please make sure the file
+
+.. _here: http://www.uio.no/english/services/it/research/hpc/abel/help/user-guide/queue-system.html
+  
+.. _Two-way nested run, with one input file: http://www2.mmm.ucar.edu/wrf/OnLineTutorial/CASES/NestRuns/2way1input.htm
+.. _Two-way nested run, with two input files: http://www2.mmm.ucar.edu/wrf/OnLineTutorial/CASES/NestRuns/2way2inputs.htm
+.. _One-way nesting using ndown: http://www2.mmm.ucar.edu/wrf/OnLineTutorial/CASES/NestRuns/ndown.htm
+.. _RestartRun: http://www2.mmm.ucar.edu/wrf/OnLineTutorial/CASES/Restart/index.html
+
 .. _January2000Case: http://www2.mmm.ucar.edu/wrf/OnLineTutorial/CASES/JAN00/
 .. _GEOGRID.TBL: http://www2.mmm.ucar.edu/wrf/users/docs/user_guide_V3/users_guide_chap3.htm#_Description_of_GEOGRID.TBL
 .. _METGRID.TBL: http://www2.mmm.ucar.edu/wrf/users/docs/user_guide_V3/users_guide_chap3.htm#_Description_of_METGRID.TBL
