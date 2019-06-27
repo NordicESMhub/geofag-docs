@@ -13,7 +13,7 @@ How to download?
 --------------------------
 To download the current release :
 
-``git clone -b release-cesm2.1.0 https://github.com/ESCOMP/cesm.git my_cesm``
+``git clone https://github.com/NordicESMHub/cesm.git my_cesm``
 ``cd my_cesm``
 ``./manage_externals/checkout_externals``
 
