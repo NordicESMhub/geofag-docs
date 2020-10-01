@@ -1,14 +1,16 @@
 Flexpart model 
 ===============
-FLEXPART (FLEXible PARTicle dispersion model) is an Lagrangian transport and dispersion model and
-can be used to study a large range of atmospheric transport processes. The current version is FLEXPART
-V 10.4 and you can find more information and resources on FLEXPART in the reference paper 
-`reference paper`_ or at `flexpart.eu`_. 
+FLEXPART (FLEXible PARTicle dispersion model) is an Lagrangian transport and
+dispersion model and can be used to study a large range of atmospheric transport
+processes. The current version is FLEXPART V 10.4 and you can find more
+information and resources on FLEXPART in the reference paper `reference paper`_
+or at `flexpart.eu`_. 
 
 FLEXPART installation
 -------------------------------
-FLEXPART is currently available as a preloaded module on SAGA which means that you have to compile the 
-source code yourself. First you need to download the FLEXPART source code by cloning the git repository.
+FLEXPART is currently not available as a preloaded module on SAGA which means
+that you have to compile the source code yourself. First you need to download
+the FLEXPART source code by cloning the git repository.
 
 ::
 
@@ -16,8 +18,9 @@ source code yourself. First you need to download the FLEXPART source code by clo
 
 
 
-After you have cloned the repository you need to edit the paths in the Makefile in flexpart/src/makefile.
-On saga you would need to edit the makefile and change the following:
+After you have cloned the repository you need to edit the paths in the Makefile
+in flexpart/src/makefile. On saga you would need to edit the makefile and change
+the following:
 
 ::
     
@@ -41,17 +44,20 @@ Before you compile FLEXPART you need to load the necessary fortran modules:
 
 
 
-Then compile FLEXPART, when issuing the make command you can add ncf=yes to enable netCDF output
-::
+Then compile FLEXPART, when issuing the make command you can add ncf=yes to
+enable netCDF output
+
+ ::
 
     $ cd flexpart/src
     $ make ncf=yes
 
-FLEXPART Setup
----------------------
-Setting up a FLEXPART is primarily done by editing the COMMAND, RELEASES, OUTGRID files in the flexpart/options 
-folder. For a in depth explanation of the different settings in flexpart take a look at the `reference paper`_ . 
-FLEXPART expect following files and folders to be present:
+FLEXPART Setup 
+--------------------- 
+Setting up a FLEXPART is primarily done by
+editing the COMMAND, RELEASES, OUTGRID files in the flexpart/options folder. For
+a in depth explanation of the different settings in flexpart take a look at the
+`reference paper`_ . FLEXPART expect following files and folders to be present:
 
 ::
 
@@ -73,9 +79,10 @@ FLEXPART expect following files and folders to be present:
     pathnames (END)
 
 
-*AVAILABLE_WINDFIELDS* is a text file contains the paths to where the atmospheric forcing is stored 
-and has to be formatted in a certain way. (A `python script`_ which makes the AVAILABLE_WINDFIELDS). The
-formatted AVAILABLE_WINDFIELDS file should look something like this.
+*AVAILABLE_WINDFIELDS* is a text file contains the paths to where the
+atmospheric forcing is stored and has to be formatted in a certain way. (A
+`python script`_ which makes the AVAILABLE_WINDFIELDS). The formatted
+AVAILABLE_WINDFIELDS file should look something like this.
 
 :: 
     
@@ -90,12 +97,36 @@ formatted AVAILABLE_WINDFIELDS file should look something like this.
                                                 ...........................
 
 
-On Saga atmospheric forcing for FLEXPART is stored in shared folder */cluster/shared/databases/flexpart* and 
-currently only ERA-INTERIM is globally available on Saga.
+On Saga atmospheric forcing for FLEXPART is stored in shared folder
+*/cluster/shared/databases/flexpart* and currently only ERA-INTERIM is globally
+available on Saga, from 1986 until 2016.
 
 Running FLEXPART
 ----------------
-Before running FLEXPART 
+Running serial on FLEXPART Saga require you to make a job script:
+
+::
+
+    #! /bin/bash
+    #SBATCH --account=nnXXXXk
+    #SBATCH --time=00:40:00
+    #SBATCH --ntasks=1
+    #SBATCH --mem-per-cpu=6G
+    #SBATCH --mail-user=example@student.geo.uio.no
+    #SBATCH --job-name=FLEXPART_TEST
+    #SBATCH --mail-type=FAIL
+    set -o errexit
+    set -o nounset
+    module --quiet purge
+    module load ecCodes/2.9.2-intel-2018b
+    module load netCDF-Fortran/4.4.4-intel-2018b
+    export PATH=/path/to/flexpart/src:$PATH
+    time FLEXPART
+Make sure you have the jobscript in the folder where the FLEXPART simulation has
+been setup. Since FLEXPART simulations does not depend on each other FLEXPART can
+be easily parallelized by running many FLEXPART instances at the same time by submitting
+multiple jobs to the job queue. Though be careful as there is a limit of 10000 jobs that 
+can be in the queue at the same time.     
 
 .. _reference paper: https://gmd.copernicus.org/articles/12/4955/2019/
 .. _flexpart.eu : https://www.flexpart.eu/
