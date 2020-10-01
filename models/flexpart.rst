@@ -19,8 +19,8 @@ the FLEXPART source code by cloning the git repository.
 
 
 After you have cloned the repository you need to edit the paths in the Makefile
-in flexpart/src/makefile. On saga you would need to edit the makefile and change
-the following:
+in flexpart/src/makefile. To compile on saga you would need change
+the following paths:
 
 ::
     
@@ -44,10 +44,10 @@ Before you compile FLEXPART you need to load the necessary fortran modules:
 
 
 
-Then compile FLEXPART, when issuing the make command you can add ncf=yes to
-enable netCDF output
+When compiling FLEXPART, you can add ncf=yes to
+enable netCDF output.
 
- ::
+::
 
     $ cd flexpart/src
     $ make ncf=yes
@@ -103,7 +103,7 @@ available on Saga, from 1986 until 2016.
 
 Running FLEXPART
 ----------------
-Running serial on FLEXPART Saga require you to make a job script:
+To run FLEXPART Saga you would first need to make a job script:
 
 ::
 
@@ -124,8 +124,14 @@ Running serial on FLEXPART Saga require you to make a job script:
     time FLEXPART
 
 Make sure you have the jobscript in the folder where the FLEXPART simulation has
-been setup. Since FLEXPART simulations does not depend on each other FLEXPART can
-be easily parallelized by running many FLEXPART instances at the same time by submitting
+been setup and then submit the job to the jobqueue.
+
+::
+    
+    $ sbatch flexpart_job.sh
+
+FLEXPART simulations does not depend on each other, which means that FLEXPART can
+easily be parallelized by running many FLEXPART instances at the same time, through submitting
 multiple jobs to the job queue. Though be careful as there is a limit of 10000 jobs that 
 can be in the queue at the same time.     
 
