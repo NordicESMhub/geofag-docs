@@ -122,6 +122,7 @@ Running serial on FLEXPART Saga require you to make a job script:
     module load netCDF-Fortran/4.4.4-intel-2018b
     export PATH=/path/to/flexpart/src:$PATH
     time FLEXPART
+
 Make sure you have the jobscript in the folder where the FLEXPART simulation has
 been setup. Since FLEXPART simulations does not depend on each other FLEXPART can
 be easily parallelized by running many FLEXPART instances at the same time by submitting
